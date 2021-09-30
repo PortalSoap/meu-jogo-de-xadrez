@@ -8,7 +8,7 @@ namespace Meu_Jogo_de_Xadrez
         static void Main(string[] args)
         {
             Tabuleiro a = new Tabuleiro(8, 8);
-            Console.WriteLine(a);
+            Tela.ImprimirTabuleiro(a);
         }
     }
 }

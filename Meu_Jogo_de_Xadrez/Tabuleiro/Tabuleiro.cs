@@ -12,9 +12,14 @@
 
         public Tabuleiro(int linhas, int colunas)
         {
-            Linhas = Linhas;
-            Colunas = Colunas;
+            Linhas = linhas;
+            Colunas = colunas;
             _pecas = new Peca[Linhas, Colunas];
+        }
+
+        public Peca RetornarPeca(int linha, int coluna)
+        {
+            return _pecas[linha, coluna];
         }
     }
 }
