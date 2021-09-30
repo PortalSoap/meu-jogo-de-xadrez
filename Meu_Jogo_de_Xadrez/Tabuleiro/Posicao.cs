@@ -1,4 +1,4 @@
-﻿namespace Meu_Jogo_de_Xadrez.Tabuleiro
+﻿namespace Meu_Jogo_de_Xadrez.TabuleiroNamespace
 {
     class Posicao
     {
