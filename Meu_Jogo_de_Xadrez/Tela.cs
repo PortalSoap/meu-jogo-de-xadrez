@@ -9,6 +9,7 @@ namespace Meu_Jogo_de_Xadrez
         {
             for(int i = 0; i < tabuleiro.Linhas; i++)
             {
+                Console.Write(8 - i + " ");
                 for(int j = 0; j < tabuleiro.Colunas; j++)
                 {
                     if (tabuleiro.RetornarPeca(i, j) == null)
@@ -17,10 +18,27 @@ namespace Meu_Jogo_de_Xadrez
                     }
                     else
                     {
-                        Console.Write(tabuleiro.RetornarPeca(i, j) + " ");
+                        ImprimirPeca(tabuleiro.RetornarPeca(i, j));
+                        Console.Write(" ");
                     }
                 }
                 Console.WriteLine();
+            }
+            Console.WriteLine("  a b c d e f g h");
+        }
+
+        public static void ImprimirPeca(Peca peca)
+        {
+            if(peca.Cor == Cor.Branco)
+            {
+                Console.Write(peca);
+            }
+            else
+            {
+                ConsoleColor defaultColor = Console.ForegroundColor;
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Write(peca);
+                Console.ForegroundColor = defaultColor;
             }
         }
     }
