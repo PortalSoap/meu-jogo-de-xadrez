@@ -8,13 +8,11 @@ namespace Meu_Jogo_de_Xadrez
     {
         static void Main(string[] args)
         {
-            Tabuleiro t = new Tabuleiro(8, 8);
+            PosicaoXadrez p = new PosicaoXadrez('c', 7);
             try
             {
-                t.ColocarPeca(new Torre(t, Cor.Preto), new Posicao(0, 0));
-                t.ColocarPeca(new Torre(t, Cor.Preto), new Posicao(1, 3));
-                t.ColocarPeca(new Rei(t, Cor.Preto), new Posicao(0, 2));
-                Tela.ImprimirTabuleiro(t);
+                Console.WriteLine(p);
+                Console.WriteLine(p.ToPosicao());
             }
             catch (TabuleiroException a)
             {
