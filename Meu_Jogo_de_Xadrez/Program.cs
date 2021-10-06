@@ -8,18 +8,25 @@ namespace Meu_Jogo_de_Xadrez
     {
         static void Main(string[] args)
         {
-            Tabuleiro t = new Tabuleiro(8, 8);
+            Posicao origem, destino;
+            PartidaDeXadrez p = new PartidaDeXadrez();
+
             try
             {
+                while(p.PartidaEncerrada != true)
+                {
+                    Console.Clear();
+                    Tela.ImprimirTabuleiro(p.Tabuleiro);
 
+                    Console.WriteLine();
 
-                t.ColocarPeca(new Torre(t, Cor.Amarelo), new Posicao(0, 0));
-                t.ColocarPeca(new Torre(t, Cor.Amarelo), new Posicao(1, 3));
-                t.ColocarPeca(new Rei(t, Cor.Amarelo), new Posicao(0, 2));
+                    Console.Write("Origem: ");
+                    origem = Tela.LerPosicaoXadrez().ToPosicao();
+                    Console.Write("Destino: ");
+                    destino = Tela.LerPosicaoXadrez().ToPosicao();
 
-                t.ColocarPeca(new Torre(t, Cor.Branco), new Posicao(3, 5));
-
-                Tela.ImprimirTabuleiro(t);
+                    p.ExecutarMoviento(origem, destino);
+                }
             }
             catch (TabuleiroException a)
             {

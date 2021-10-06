@@ -1,4 +1,5 @@
 ﻿using System;
+using Meu_Jogo_de_Xadrez.JogoDeXadrez;
 using Meu_Jogo_de_Xadrez.TabuleiroNamespace;
 
 namespace Meu_Jogo_de_Xadrez
@@ -25,6 +26,18 @@ namespace Meu_Jogo_de_Xadrez
                 Console.WriteLine();
             }
             Console.WriteLine("  a b c d e f g h");
+        }
+
+        public static PosicaoXadrez LerPosicaoXadrez()
+        {
+            string entrada;
+            char coluna;
+            int linha;
+
+            entrada = Console.ReadLine();
+            coluna = entrada[0];
+            linha = int.Parse(entrada[1].ToString());
+            return new PosicaoXadrez(coluna, linha);
         }
 
         public static void ImprimirPeca(Peca peca)

@@ -18,5 +18,10 @@
             QuantidadeDeMovimentos = 0;
             Posicao = null;
         }
+
+        public void IncrementarQtdMovimento()
+        {
+            QuantidadeDeMovimentos++;
+        }
     }
 }
