@@ -63,7 +63,7 @@
         // Verificação de Posição.
         public bool PosicaoValida(Posicao posicao)
         {
-            if(posicao.Linha < 0 || posicao.Coluna <0 ||
+            if(posicao.Linha < 0 || posicao.Coluna < 0 ||
                 posicao.Linha >= Linhas || posicao.Coluna >= Colunas)
             {
                 return false;

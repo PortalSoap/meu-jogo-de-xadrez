@@ -1,6 +1,6 @@
 ﻿namespace Meu_Jogo_de_Xadrez.TabuleiroNamespace
 {
-    class Peca
+    abstract class Peca
     {
         public Posicao Posicao { get; set; }
         public Cor Cor { get; protected set; }
@@ -18,6 +18,8 @@
             QuantidadeDeMovimentos = 0;
             Posicao = null;
         }
+
+        public abstract bool[,] MovimentosPossiveis();
 
         public void IncrementarQtdMovimento()
         {
