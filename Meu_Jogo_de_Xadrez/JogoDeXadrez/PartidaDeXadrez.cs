@@ -26,7 +26,7 @@ namespace Meu_Jogo_de_Xadrez.JogoDeXadrez
             ColocarPecas();
         }
 
-        public Peca ExecutarMoviento(Posicao origem, Posicao destino)
+        public Peca ExecutarMovimento(Posicao origem, Posicao destino)
         {
             Peca peca, pecaCapturada;
 
@@ -34,9 +34,9 @@ namespace Meu_Jogo_de_Xadrez.JogoDeXadrez
             peca.IncrementarQtdMovimento();
             pecaCapturada = Tabuleiro.RetirarPeca(destino);
             Tabuleiro.ColocarPeca(peca, destino);
-            if(pecaCapturada != null)
+            if (pecaCapturada != null)
             {
-                _pecasCapturadas.Add(pecaCapturada);    
+                _pecasCapturadas.Add(pecaCapturada);
             }
             return pecaCapturada;
         }
@@ -46,7 +46,7 @@ namespace Meu_Jogo_de_Xadrez.JogoDeXadrez
             Peca p = Tabuleiro.RetirarPeca(destino);
             p.DecrementarQtdMovimento();
 
-            if(pecaCapturada != null)
+            if (pecaCapturada != null)
             {
                 Tabuleiro.ColocarPeca(pecaCapturada, destino);
                 _pecasCapturadas.Remove(pecaCapturada);
@@ -56,8 +56,8 @@ namespace Meu_Jogo_de_Xadrez.JogoDeXadrez
 
         public void RealizarJogada(Posicao origem, Posicao destino)
         {
-            Peca pecaCapturada = ExecutarMoviento(origem, destino);
-            if(VerificarXeque(JogadorAtual) == true)
+            Peca pecaCapturada = ExecutarMovimento(origem, destino);
+            if (VerificarXeque(JogadorAtual) == true)
             {
                 DesfazerMovimento(origem, destino, pecaCapturada);
                 throw new TabuleiroException("Você não pode se colocar em xeque!");
@@ -72,8 +72,15 @@ namespace Meu_Jogo_de_Xadrez.JogoDeXadrez
                 Xeque = false;
             }
 
-            Turno += 1;
-            MudarJogador();
+            if (TesteXequemate(RetornarPecaAdversaria(JogadorAtual)))
+            {
+                PartidaEncerrada = true;
+            }
+            else
+            {
+                Turno += 1;
+                MudarJogador();
+            }
         }
 
         public void ValidarPosicaoOrigem(Posicao posicao)
@@ -115,7 +122,7 @@ namespace Meu_Jogo_de_Xadrez.JogoDeXadrez
         public HashSet<Peca> PecasCapturadas(Cor cor)
         {
             HashSet<Peca> aux = new HashSet<Peca>();
-            foreach(Peca p in _pecasCapturadas)
+            foreach (Peca p in _pecasCapturadas)
             {
                 if (p.Cor == cor)
                 {
@@ -128,7 +135,7 @@ namespace Meu_Jogo_de_Xadrez.JogoDeXadrez
         public HashSet<Peca> PecasEmJogo(Cor cor)
         {
             HashSet<Peca> aux = new HashSet<Peca>();
-            foreach(Peca p in _pecas)
+            foreach (Peca p in _pecas)
             {
                 if (p.Cor == cor)
                 {
@@ -141,7 +148,7 @@ namespace Meu_Jogo_de_Xadrez.JogoDeXadrez
 
         private Cor RetornarPecaAdversaria(Cor cor)
         {
-            if(cor == Cor.Branco)
+            if (cor == Cor.Branco)
             {
                 return Cor.Preto;
             }
@@ -155,7 +162,7 @@ namespace Meu_Jogo_de_Xadrez.JogoDeXadrez
         {
             foreach (Peca p in PecasEmJogo(cor))
             {
-                if(p is Rei)
+                if (p is Rei)
                 {
                     return p;
                 }
@@ -167,20 +174,52 @@ namespace Meu_Jogo_de_Xadrez.JogoDeXadrez
         {
             Peca r = RetornarRei(cor);
 
-            if(r == null)
+            if (r == null)
             {
                 throw new TabuleiroException($"Não existe rei da cor {cor} neste tabuleiro!");
             }
 
-            foreach(Peca p in PecasEmJogo(RetornarPecaAdversaria(cor)))
+            foreach (Peca p in PecasEmJogo(RetornarPecaAdversaria(cor)))
             {
                 bool[,] matriz = p.MovimentosPossiveis();
-                if(matriz[r.Posicao.Linha, r.Posicao.Coluna] == true)
+                if (matriz[r.Posicao.Linha, r.Posicao.Coluna] == true)
                 {
                     return true;
                 }
             }
             return false;
+        }
+
+        public bool TesteXequemate(Cor cor)
+        {
+            if (VerificarXeque(cor) != true)
+            {
+                return false;
+            }
+
+            foreach (Peca p in PecasEmJogo(cor))
+            {
+                bool[,] matriz = p.MovimentosPossiveis();
+                for (int i = 0; i < Tabuleiro.Linhas; i++)
+                {
+                    for (int j = 0; j < Tabuleiro.Colunas; j++)
+                    {
+                        if (matriz[i, j] == true)
+                        {
+                            Posicao origem = p.Posicao;
+                            Posicao destino = new Posicao(i, j);
+                            Peca pecaCapturada = ExecutarMovimento(origem, destino);
+                            bool testeXeque = VerificarXeque(cor);
+                            DesfazerMovimento(origem, destino, pecaCapturada);
+                            if (testeXeque != true)
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+            return true;
         }
 
         public void ColocarNovaPeca(char coluna, int linha, Peca peca)
@@ -192,20 +231,13 @@ namespace Meu_Jogo_de_Xadrez.JogoDeXadrez
         private void ColocarPecas()
         {
             // Peças Brancas.
+            ColocarNovaPeca('h', 7, new Torre(Tabuleiro, Cor.Branco));
             ColocarNovaPeca('c', 1, new Torre(Tabuleiro, Cor.Branco));
-            ColocarNovaPeca('c', 2, new Torre(Tabuleiro, Cor.Branco));
-            ColocarNovaPeca('d', 2, new Torre(Tabuleiro, Cor.Branco));
-            ColocarNovaPeca('e', 2, new Torre(Tabuleiro, Cor.Branco));
-            ColocarNovaPeca('e', 1, new Torre(Tabuleiro, Cor.Branco));
             ColocarNovaPeca('d', 1, new Rei(Tabuleiro, Cor.Branco));
 
             // Peças Pretas.
-            ColocarNovaPeca('c', 7, new Torre(Tabuleiro, Cor.Preto));
-            ColocarNovaPeca('c', 8, new Torre(Tabuleiro, Cor.Preto));
-            ColocarNovaPeca('d', 7, new Torre(Tabuleiro, Cor.Preto));
-            ColocarNovaPeca('e', 8, new Torre(Tabuleiro, Cor.Preto));
-            ColocarNovaPeca('e', 7, new Torre(Tabuleiro, Cor.Preto));
-            ColocarNovaPeca('d', 8, new Rei(Tabuleiro, Cor.Preto));
+            ColocarNovaPeca('b', 8, new Torre(Tabuleiro, Cor.Preto));
+            ColocarNovaPeca('a', 8, new Rei(Tabuleiro, Cor.Preto));
         }
     }
 }

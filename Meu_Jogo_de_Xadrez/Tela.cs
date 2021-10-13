@@ -13,11 +13,18 @@ namespace Meu_Jogo_de_Xadrez
             Console.WriteLine();
             ImprimirPecasCapturadas(p);
             Console.WriteLine("Turno: " + p.Turno);
-            Console.WriteLine("Aguardando jogada: " + p.JogadorAtual);
-
-            if(p.Xeque == true)
+            if (p.PartidaEncerrada != true)
             {
-                Console.WriteLine("XEQUE!");
+                Console.WriteLine("Aguardando jogada: " + p.JogadorAtual);
+                if (p.Xeque == true)
+                {
+                    Console.WriteLine("XEQUE!");
+                }
+            }
+            else
+            {
+                Console.WriteLine("XEQUEMATE!");
+                Console.WriteLine($"Vencedor: {p.JogadorAtual}");
             }
         }
 
@@ -37,7 +44,7 @@ namespace Meu_Jogo_de_Xadrez
         {
             ConsoleColor corOriginal = Console.ForegroundColor;
             Console.Write("[ ");
-            foreach(Peca p in pecas)
+            foreach (Peca p in pecas)
             {
                 if (p.Cor == Cor.Branco)
                 {
@@ -77,7 +84,7 @@ namespace Meu_Jogo_de_Xadrez
                 Console.Write(8 - i + " ");
                 for (int j = 0; j < tabuleiro.Colunas; j++)
                 {
-                    if(posicoesPossiveis[i, j] == true)
+                    if (posicoesPossiveis[i, j] == true)
                     {
                         Console.BackgroundColor = fundoAlterado;
                     }
