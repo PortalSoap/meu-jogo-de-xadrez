@@ -15,7 +15,19 @@ namespace Meu_Jogo_de_Xadrez
             Console.WriteLine("Turno: " + p.Turno);
             if (p.PartidaEncerrada != true)
             {
-                Console.WriteLine("Aguardando jogada: " + p.JogadorAtual);
+                if (p.JogadorAtual == Cor.Branco)
+                {
+                    Console.Write("Aguardando jogada: ");
+                    Console.WriteLine(p.JogadorAtual);
+                }
+                else
+                {
+                    ConsoleColor originalColor = Console.ForegroundColor;
+                    Console.Write("Aguardando jogada: ");
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine(p.JogadorAtual);
+                    Console.ForegroundColor = originalColor;
+                }
                 if (p.Xeque == true)
                 {
                     Console.WriteLine("XEQUE!");
