@@ -46,7 +46,13 @@ namespace Meu_Jogo_de_Xadrez
             Console.Write("Brancas: ");
             ImprimirConjunto(partida.PecasCapturadas(Cor.Branco));
             Console.WriteLine();
-            Console.Write("Pretas: ");
+
+            ConsoleColor originalColor = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("Pretas");
+            Console.ForegroundColor = originalColor;
+            Console.Write(":");
+
             ImprimirConjunto(partida.PecasCapturadas(Cor.Preto));
             Console.WriteLine();
             Console.WriteLine();

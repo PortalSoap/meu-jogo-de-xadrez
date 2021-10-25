@@ -146,6 +146,22 @@ namespace Meu_Jogo_de_Xadrez.JogoDeXadrez
                 throw new TabuleiroException("Você não pode se colocar em xeque!");
             }
 
+            Peca peca = Tabuleiro.RetornarPeca(destino);
+
+            // JOGADA ESPECIAL: Promoção.
+            if(peca is Peao)
+            {
+                if (peca.Cor == Cor.Branco && destino.Linha == 0
+                    || (peca.Cor == Cor.Preto && destino.Linha == 7))
+                {
+                    peca = Tabuleiro.RetirarPeca(destino);
+                    _pecas.Remove(peca);
+                    Peca dama = new Dama(Tabuleiro, peca.Cor);
+                    Tabuleiro.ColocarPeca(dama, destino);
+                    _pecas.Add(dama);
+                }
+            }
+
             if (VerificarXeque(RetornarPecaAdversaria(JogadorAtual)))
             {
                 Xeque = true;
@@ -166,7 +182,6 @@ namespace Meu_Jogo_de_Xadrez.JogoDeXadrez
             }
 
             // JOGADA ESPECIAL:En Passant.
-            Peca peca = Tabuleiro.RetornarPeca(destino);
             if (peca is Peao && (destino.Linha == origem.Linha - 2 || destino.Linha == origem.Linha + 2))
             {
                 VulneravelEnPassant = peca;
